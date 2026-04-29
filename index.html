@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPTV Player PRO</title>
+    <title>IPTV Player PRO - SportLive</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body { margin:0; background:#0b0b0b; color:#fff; font-family:Arial, sans-serif; overflow-x: hidden; }
-        header { background:#111; padding:15px; text-align:center; font-size:22px; font-weight: bold; border-bottom: 2px solid #333; }
+        header { background:#111; padding:15px; text-align:center; font-size:22px; font-weight: bold; border-bottom: 2px solid #333; color: #0078ff; }
         
-        /* Container do vídeo fixo no topo para melhor experiência */
-        .video-container { position: sticky; top: 0; z-index: 100; background: #000; }
+        .video-container { position: sticky; top: 0; z-index: 100; background: #000; border-bottom: 1px solid #333; }
         video { width:100%; max-height:280px; background:black; display: block; }
         
         #busca { width:90%; margin:15px auto; display:block; padding:12px; border:none; border-radius:8px; font-size:16px; background: #222; color: #fff; outline: none; }
@@ -30,39 +29,42 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 50px;
+            min-height: 55px;
             word-break: break-word;
+            line-height: 1.2;
         }
         .canal:hover { background:#0078ff; transform: translateY(-3px); border-color: #fff; }
         
-        .loading, .erro { text-align: center; padding: 20px; font-size: 18px; }
+        .loading, .erro { text-align: center; padding: 40px; font-size: 18px; }
         .erro { color: #ff4444; }
     </style>
 </head>
 <body>
 
-<header>📺 IPTV Player PRO</header>
+<header>📺 IPTV SportLive PRO</header>
 
 <div class="video-container">
     <video id="video" controls autoplay></video>
 </div>
 
-<input type="text" id="busca" placeholder="🔍 Buscar canal ou categoria...">
+<input type="text" id="busca" placeholder="🔍 Buscar canal...">
 
-<div id="lista" class="loading">Carregando canais, aguarde...</div>
+<div id="lista" class="loading">Carregando lista SportLive...</div>
 
 <script>
-    // Configurações da Lista
-    const urlLista = "https://api.allorigins.win/raw?url=http://newoneblue.site:80/player_api.php?username=Vanessa1234&password=Vanessa1234&type=m3u&output=m3u8";
+    // URL do Dropbox atualizada com parâmetro de download direto
+    const urlOriginal = "https://dl.dropbox.com/scl/fi/nln0qvhqwt6fx0b57zoy2/sportLive.txt?rlkey=qpodxt2auc0wyy46o9qdmto3b&st=kjqu5blj&dl=1";
+    
+    // Usamos o proxy para evitar erro de CORS
+    const urlLista = "https://api.allorigins.win/raw?url=" + encodeURIComponent(urlOriginal);
     
     const video = document.getElementById('video');
     const listaDiv = document.getElementById("lista");
     let hls = new Hls();
 
-    // FUNÇÃO PARA DAR PLAY
     function play(url) {
         if (Hls.isSupported()) {
-            hls.destroy(); // Limpa a instância anterior
+            hls.destroy();
             hls = new Hls();
             hls.loadSource(url);
             hls.attachMedia(video);
@@ -71,11 +73,9 @@
             video.src = url;
             video.play();
         }
-        // Rola a tela para o vídeo ao clicar
         window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
-    // PARSER M3U OTIMIZADO
     function parseM3U(text) {
         const linhas = text.split("\n");
         let listaCanais = [];
@@ -84,10 +84,8 @@
         for (let i = 0; i < linhas.length; i++) {
             let linha = linhas[i].trim();
             if (linha.startsWith("#EXTINF")) {
-                // Captura o nome após a última vírgula
-                const regexNome = /,(.+)$/;
-                const match = linha.match(regexNome);
-                nomeAtual = match ? match[1].trim() : "Canal sem nome";
+                const partes = linha.split(",");
+                nomeAtual = partes[partes.length - 1].trim() || "Canal sem nome";
             } else if (linha.startsWith("http")) {
                 listaCanais.push({ nome: nomeAtual, url: linha });
             }
@@ -95,7 +93,6 @@
         return listaCanais;
     }
 
-    // RENDERIZAR NA TELA
     function render(canais) {
         listaDiv.innerHTML = "";
         if (canais.length === 0) {
@@ -103,7 +100,6 @@
             return;
         }
         
-        // DocumentFragment melhora o desempenho ao renderizar muitos itens
         const fragment = document.createDocumentFragment();
         canais.forEach(c => {
             const div = document.createElement("div");
@@ -115,14 +111,12 @@
         listaDiv.appendChild(fragment);
     }
 
-    // BUSCA
     document.getElementById("busca").addEventListener("input", e => {
         const termo = e.target.value.toLowerCase();
         const filtrados = window.allCanais.filter(c => c.nome.toLowerCase().includes(termo));
         render(filtrados);
     });
 
-    // CARREGAR LISTA VIA PROXY (Para evitar erro de CORS)
     fetch(urlLista)
         .then(res => {
             if (!res.ok) throw new Error();
@@ -133,7 +127,7 @@
             render(window.allCanais);
         })
         .catch(() => {
-            listaDiv.innerHTML = "<p class='erro'>❌ Erro ao carregar lista.<br><small>Verifique sua conexão ou se os dados de acesso estão expirados.</small></p>";
+            listaDiv.innerHTML = "<p class='erro'>❌ Erro ao carregar a lista do Dropbox.<br><small>Verifique se o arquivo ainda está disponível ou se o link expirou.</small></p>";
         });
 </script>
 
