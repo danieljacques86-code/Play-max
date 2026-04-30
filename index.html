@@ -1,314 +1,180 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IPTV SportLive PRO - Premium Theme</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <style>
-        /* RESET E BASE */
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { 
-            margin:0; 
-            background:#000; 
-            color:#fff; 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPTV PREMIUM PRO</title>
 
-        /* VÍDEO DE FUNDO ANIMADO (STADIUM) */
-        .bg-video-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            overflow: hidden;
-        }
-        .bg-video-container video {
-            min-width: 100%; 
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            object-fit: cover;
-        }
-        /* Filtro escuro sobre o vídeo de fundo para dar contraste ao texto */
-        .bg-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.75); /* Ajuste a opacidade aqui (0.0 a 1.0) */
-            z-index: -1;
-        }
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-        /* HEADER */
-        header { 
-            background: rgba(17, 17, 17, 0.8);
-            backdrop-filter: blur(10px); /* Efeito vidro fosco */
-            padding: 15px; 
-            text-align: center; 
-            font-size: 20px; 
-            font-weight: 800; 
-            border-bottom: 2px solid #0078ff; 
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-        header span { color: #0078ff; text-shadow: 0 0 10px #0078ff; }
-        
-        /* PLAYER CONTAINER (Fixo no topo) */
-        .video-container { 
-            position: sticky; 
-            top: 0; 
-            z-index: 100; 
-            background: #000; 
-            border-bottom: 3px solid #0078ff;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.8);
-        }
-        video#main-video { 
-            width:100%; 
-            max-height: 56.25vw; /* Proporção 16:9 dinâmica */
-            background:black; 
-            display: block; 
-        }
-        
-        /* ÁREA DE BUSCA */
-        .search-wrapper {
-            padding: 10px 15px;
-            position: relative;
-            z-index: 10;
-        }
-        #busca { 
-            width: 100%; 
-            margin: 10px auto; 
-            display: block; 
-            padding: 14px 20px; 
-            border: 1px solid rgba(255,255,255,0.1); 
-            border-radius: 50px; /* Arredondado moderno */
-            font-size: 16px; 
-            background: rgba(255, 255, 255, 0.05); 
-            color: #fff; 
-            outline: none; 
-            transition: 0.3s;
-            backdrop-filter: blur(5px);
-        }
-        #busca:focus { 
-            border-color: #0078ff; 
-            background: rgba(0, 120, 255, 0.1);
-            box-shadow: 0 0 15px rgba(0, 120, 255, 0.4);
-        }
+<style>
+body{
+    margin:0;
+    background:#0b0b0b;
+    color:#fff;
+    font-family:Arial;
+}
 
-        /* LISTA DE CANAIS (TEMA PREMIUM GLASS) */
-        #lista { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
-            gap: 15px; 
-            padding: 15px; 
-            padding-bottom: 80px; /* Espaço para o botão flutuante */
-        }
-        
-        .canal { 
-            background: rgba(255, 255, 255, 0.03); /* Vidro bem suave */
-            backdrop-filter: blur(8px);
-            padding: 20px 15px; 
-            border-radius: 12px; 
-            text-align: center; 
-            cursor: pointer; 
-            transition: all 0.3s ease; 
-            font-size: 13px; 
-            font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 70px;
-            word-break: break-word;
-            line-height: 1.3;
-            color: rgba(255,255,255,0.9);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        }
-        
-        /* Efeitos ao passar o mouse (PC) e tocar (Mobile) */
-        .canal:hover { 
-            background: rgba(0, 120, 255, 0.2); 
-            transform: translateY(-5px); 
-            border-color: #0078ff; 
-            box-shadow: 0 8px 20px rgba(0, 120, 255, 0.4);
-            color: #fff;
-        }
-        .canal:active { transform: translateY(-1px) scale(0.98); }
-        
-        /* ESTADOS */
-        .loading, .erro { 
-            grid-column: 1 / -1; 
-            text-align: center; 
-            padding: 60px 20px; 
-            font-size: 16px; 
-            background: rgba(0,0,0,0.5);
-            border-radius: 15px;
-            backdrop-filter: blur(5px);
-        }
-        .erro { color: #ff4444; border: 1px solid #ff4444; }
-        .loading { color: #0078ff; font-weight: bold; }
+header{
+    padding:15px;
+    background:#111;
+    text-align:center;
+    font-weight:bold;
+    font-size:20px;
+    color:#00bfff;
+}
 
-        /* BOTÃO FLUTUANTE VOLTAR AO TOPO */
-        #btn-topo {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: #0078ff;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,120,255,0.5);
-            z-index: 99;
-            opacity: 0;
-            visibility: hidden;
-            transition: 0.3s;
-        }
-        #btn-topo.show {
-            opacity: 1;
-            visibility: visible;
-        }
+#busca{
+    width:90%;
+    margin:10px auto;
+    display:block;
+    padding:12px;
+    border-radius:30px;
+    border:none;
+    outline:none;
+}
 
-        /* AJUSTES PARA TELAS GRANDES (PC) */
-        @media (min-width: 1024px) {
-            video#main-video { max-height: 80vh; }
-            #lista { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; padding: 30px; }
-            .canal { font-size: 15px; }
-        }
-    </style>
+#categorias{
+    display:flex;
+    overflow:auto;
+    gap:10px;
+    padding:10px;
+}
+
+.cat{
+    padding:8px 15px;
+    background:#222;
+    border-radius:20px;
+    cursor:pointer;
+}
+
+.cat:hover{
+    background:#00bfff;
+}
+
+#lista{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+    gap:10px;
+    padding:10px;
+}
+
+.item{
+    background:#1a1a1a;
+    padding:15px;
+    text-align:center;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.item:hover{
+    background:#00bfff;
+}
+
+video{
+    width:100%;
+    background:black;
+}
+</style>
 </head>
+
 <body>
 
-<div class="bg-video-container">
-    <video autoplay loop muted playsinline poster="https://media.istockphoto.com/id/501411994/pt/v%C3%ADdeo/est%C3%A1dio-de-futebol.jpg?s=640x640&k=20&c=X73w8hLp_0HlXqS_wG6A5mC5BqR8_k0fHk8E4e5-9-k=">
-        <source src="https://media.istockphoto.com/id/501411994/pt/v%C3%ADdeo/est%C3%A1dio-de-futebol.mp4?s=mp4-640x640-is&k=20&c=GUI4wMeIYrcK3-JZRjw3mTXDin5fJ7Oq6U5vRQXjpBQ=" type="video/mp4">
-    </video>
-</div>
-<div class="bg-overlay"></div>
+<header>📺 IPTV PREMIUM PRO</header>
 
-<header>📺 <span>Sport</span>Live PRO</header>
+<video id="video" controls autoplay></video>
 
-<div class="video-container">
-    <video id="main-video" controls autoplay playsinline></video>
-</div>
+<input type="text" id="busca" placeholder="Buscar canal...">
 
-<div class="search-wrapper">
-    <input type="text" id="busca" placeholder="🔍 Buscar time, canal ou evento...">
-</div>
+<div id="categorias"></div>
 
-<div id="lista" class="loading">Iniciando sistema SportLive...</div>
-
-<button id="btn-topo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+<div id="lista">Carregando...</div>
 
 <script>
-    // Configurações
-    const urlOriginal = "http://ns199.vpngeral.com:8080/get.php?username=frog7442r&password=110716eeaeu&type=m3u_plus&output=mpegts";
-    const urlLista = "https://api.allorigins.win/raw?url=" + encodeURIComponent(urlOriginal);
-    
-    const video = document.getElementById('main-video');
-    const listaDiv = document.getElementById("lista");
-    const btnTopo = document.getElementById("btn-topo");
-    let hls = new Hls();
+// 🔐 SEU LOGIN
+const server = "http://flixxxx.ddns.net:8080";
+const user = "anacarolinaff14";
+const pass = "4728321";
 
-    // PLAYER
-    function play(url) {
-        if (Hls.isSupported()) {
-            hls.destroy();
-            hls = new Hls();
-            hls.loadSource(url);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(()=>console.log("Autoplay bloqueado")));
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = url;
-            video.play().catch(()=>console.log("Autoplay bloqueado"));
-        }
-        window.scrollTo({top: 0, behavior: 'smooth'});
+// API
+const api = `${server}/player_api.php?username=${user}&password=${pass}`;
+
+// ELEMENTOS
+const video = document.getElementById("video");
+const lista = document.getElementById("lista");
+const categoriasDiv = document.getElementById("categorias");
+
+let canais = [];
+let categorias = [];
+
+// PLAYER
+function play(url){
+    if(Hls.isSupported()){
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+    }else{
+        video.src = url;
     }
+}
 
-    // PARSER M3U
-    function parseM3U(text) {
-        const linhas = text.split("\n");
-        let listaCanais = [];
-        let nomeAtual = "";
+// CARREGAR CATEGORIAS
+fetch(api + "&action=get_live_categories")
+.then(r=>r.json())
+.then(data=>{
+    categorias = data;
+    renderCategorias();
+});
 
-        for (let i = 0; i < linhas.length; i++) {
-            let linha = linhas[i].trim();
-            if (linha.startsWith("#EXTINF")) {
-                const partes = linha.split(",");
-                nomeAtual = partes[partes.length - 1].trim() || "Canal Sem Nome";
-            } else if (linha.startsWith("http")) {
-                listaCanais.push({ nome: nomeAtual, url: linha });
-            }
-        }
-        return listaCanais;
-    }
+// CARREGAR CANAIS
+fetch(api + "&action=get_live_streams")
+.then(r=>r.json())
+.then(data=>{
+    canais = data;
+    render(canais);
+});
 
-    // RENDERIZAR
-    function render(canais) {
-        listaDiv.innerHTML = "";
-        if (canais.length === 0) {
-            listaDiv.innerHTML = "<p class='erro'>Nenhum canal esportivo encontrado.</p>";
-            return;
-        }
-        
-        const fragment = document.createDocumentFragment();
-        canais.forEach(c => {
-            const div = document.createElement("div");
-            div.className = "canal";
-            div.innerText = c.nome;
-            div.onclick = () => play(c.url);
-            fragment.appendChild(div);
-        });
-        listaDiv.appendChild(fragment);
-    }
-
-    // BUSCA
-    document.getElementById("busca").addEventListener("input", e => {
-        const termo = e.target.value.toLowerCase();
-        const filtrados = window.allCanais.filter(c => c.nome.toLowerCase().includes(termo));
-        render(filtrados);
+// RENDER CATEGORIAS
+function renderCategorias(){
+    categoriasDiv.innerHTML="";
+    categorias.forEach(c=>{
+        const div = document.createElement("div");
+        div.className="cat";
+        div.innerText=c.category_name;
+        div.onclick=()=>filtrarCategoria(c.category_id);
+        categoriasDiv.appendChild(div);
     });
+}
 
-    // LÓGICA DO BOTÃO FLUTUANTE
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) {
-            btnTopo.classList.add('show');
-        } else {
-            btnTopo.classList.remove('show');
+// FILTRAR
+function filtrarCategoria(id){
+    const filtrados = canais.filter(c=>c.category_id == id);
+    render(filtrados);
+}
+
+// RENDER LISTA
+function render(listaCanais){
+    lista.innerHTML="";
+    listaCanais.forEach(c=>{
+        const div = document.createElement("div");
+        div.className="item";
+        div.innerText=c.name;
+
+        div.onclick=()=>{
+            const url = `${server}/live/${user}/${pass}/${c.stream_id}.m3u8`;
+            play(url);
         }
-    });
 
-    // CARREGAR LISTA DROPBOX
-    fetch(urlLista)
-        .then(res => {
-            if (!res.ok) throw new Error();
-            return res.text();
-        })
-        .then(text => {
-            window.allCanais = parseM3U(text);
-            render(window.allCanais);
-        })
-        .catch(() => {
-            listaDiv.innerHTML = "<p class='erro'>❌ ERRO DE CONEXÃO.<br><br><small>Não foi possível sintonizar a lista do Dropbox.<br>Verifique se o link ainda é válido.</small></p>";
-        });
+        lista.appendChild(div);
+    });
+}
+
+// BUSCA
+document.getElementById("busca").addEventListener("input", e=>{
+    const termo = e.target.value.toLowerCase();
+    const filtrados = canais.filter(c=>c.name.toLowerCase().includes(termo));
+    render(filtrados);
+});
 </script>
 
 </body>
