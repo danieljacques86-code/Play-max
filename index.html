@@ -9,8 +9,14 @@ const proxy = (url) =>
 const video = document.getElementById("video");
 const lista = document.getElementById("lista");
 
+// segurança básica (evita crash)
+if (!video || !lista) {
+    document.body.innerHTML = "❌ ERRO: elementos HTML não encontrados (#video ou #lista)";
+}
+
+// PLAYER
 function play(url){
-    if(Hls.isSupported()){
+    if(window.Hls && Hls.isSupported()){
         const hls = new Hls();
         hls.loadSource(url);
         hls.attachMedia(video);
@@ -19,11 +25,26 @@ function play(url){
     }
 }
 
-// 🔥 1 - carregar categorias primeiro (rápido)
+// 🔥 CARREGAR CATEGORIAS
+lista.innerHTML = "Carregando categorias...";
+
 fetch(proxy(`${server}/player_api.php?username=${user}&password=${pass}&action=get_live_categories`))
-.then(r=>r.json())
-.then(cats=>{
+.then(r => r.text()) // 🔥 primeiro como TEXTO
+.then(text => {
+    let cats;
+
+    try {
+        cats = JSON.parse(text); // tenta converter
+    } catch(e) {
+        throw new Error("Resposta inválida (não é JSON)");
+    }
+
     lista.innerHTML = "";
+
+    if (!cats || cats.length === 0) {
+        lista.innerHTML = "⚠️ Nenhuma categoria encontrada";
+        return;
+    }
 
     cats.forEach(cat=>{
         const div = document.createElement("div");
@@ -34,18 +55,35 @@ fetch(proxy(`${server}/player_api.php?username=${user}&password=${pass}&action=g
 
         lista.appendChild(div);
     });
+})
+.catch(err => {
+    console.error(err);
+    lista.innerHTML = "❌ Erro ao carregar categorias<br><br>Servidor bloqueou ou caiu";
 });
 
-// 🔥 2 - carregar canais só quando clicar
+// 🔥 CARREGAR CANAIS
 function carregarCanais(catId){
     lista.innerHTML = "Carregando canais...";
 
     fetch(proxy(`${server}/player_api.php?username=${user}&password=${pass}&action=get_live_streams`))
-    .then(r=>r.json())
-    .then(data=>{
+    .then(r => r.text())
+    .then(text => {
+        let data;
+
+        try {
+            data = JSON.parse(text);
+        } catch(e) {
+            throw new Error("Erro ao converter canais");
+        }
+
         const filtrados = data.filter(c=>c.category_id == catId);
 
         lista.innerHTML = "";
+
+        if (filtrados.length === 0) {
+            lista.innerHTML = "⚠️ Nenhum canal nessa categoria";
+            return;
+        }
 
         filtrados.forEach(c=>{
             const div = document.createElement("div");
@@ -59,6 +97,10 @@ function carregarCanais(catId){
 
             lista.appendChild(div);
         });
+    })
+    .catch(err=>{
+        console.error(err);
+        lista.innerHTML = "❌ Erro ao carregar canais";
     });
 }
 </script>
