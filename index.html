@@ -1,181 +1,64 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IPTV PREMIUM PRO</title>
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
-<style>
-body{
-    margin:0;
-    background:#0b0b0b;
-    color:#fff;
-    font-family:Arial;
-}
-
-header{
-    padding:15px;
-    background:#111;
-    text-align:center;
-    font-weight:bold;
-    font-size:20px;
-    color:#00bfff;
-}
-
-#busca{
-    width:90%;
-    margin:10px auto;
-    display:block;
-    padding:12px;
-    border-radius:30px;
-    border:none;
-    outline:none;
-}
-
-#categorias{
-    display:flex;
-    overflow:auto;
-    gap:10px;
-    padding:10px;
-}
-
-.cat{
-    padding:8px 15px;
-    background:#222;
-    border-radius:20px;
-    cursor:pointer;
-}
-
-.cat:hover{
-    background:#00bfff;
-}
-
-#lista{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
-    gap:10px;
-    padding:10px;
-}
-
-.item{
-    background:#1a1a1a;
-    padding:15px;
-    text-align:center;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-.item:hover{
-    background:#00bfff;
-}
-
-video{
-    width:100%;
-    background:black;
-}
-</style>
-</head>
-
-<body>
-
-<header>📺 IPTV PREMIUM PRO</header>
-
-<video id="video" controls autoplay></video>
-
-<input type="text" id="busca" placeholder="Buscar canal...">
-
-<div id="categorias"></div>
-
-<div id="lista">Carregando...</div>
-
 <script>
-// 🔐 SEU LOGIN
 const server = "http://flixxxx.ddns.net:8080";
 const user = "anacarolinaff14";
 const pass = "4728321";
 
-// API
-const api = `${server}/player_api.php?username=${user}&password=${pass}`;
+const proxy = (url) => 
+  "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
 
-// ELEMENTOS
 const video = document.getElementById("video");
 const lista = document.getElementById("lista");
-const categoriasDiv = document.getElementById("categorias");
 
-let canais = [];
-let categorias = [];
-
-// PLAYER
 function play(url){
     if(Hls.isSupported()){
         const hls = new Hls();
         hls.loadSource(url);
         hls.attachMedia(video);
-    }else{
+    } else {
         video.src = url;
     }
 }
 
-// CARREGAR CATEGORIAS
-fetch(api + "&action=get_live_categories")
+// 🔥 1 - carregar categorias primeiro (rápido)
+fetch(proxy(`${server}/player_api.php?username=${user}&password=${pass}&action=get_live_categories`))
 .then(r=>r.json())
-.then(data=>{
-    categorias = data;
-    renderCategorias();
-});
+.then(cats=>{
+    lista.innerHTML = "";
 
-// CARREGAR CANAIS
-fetch(api + "&action=get_live_streams")
-.then(r=>r.json())
-.then(data=>{
-    canais = data;
-    render(canais);
-});
-
-// RENDER CATEGORIAS
-function renderCategorias(){
-    categoriasDiv.innerHTML="";
-    categorias.forEach(c=>{
-        const div = document.createElement("div");
-        div.className="cat";
-        div.innerText=c.category_name;
-        div.onclick=()=>filtrarCategoria(c.category_id);
-        categoriasDiv.appendChild(div);
-    });
-}
-
-// FILTRAR
-function filtrarCategoria(id){
-    const filtrados = canais.filter(c=>c.category_id == id);
-    render(filtrados);
-}
-
-// RENDER LISTA
-function render(listaCanais){
-    lista.innerHTML="";
-    listaCanais.forEach(c=>{
+    cats.forEach(cat=>{
         const div = document.createElement("div");
         div.className="item";
-        div.innerText=c.name;
+        div.innerText = "📂 " + cat.category_name;
 
-        div.onclick=()=>{
-            const url = `${server}/live/${user}/${pass}/${c.stream_id}.m3u8`;
-            play(url);
-        }
+        div.onclick = () => carregarCanais(cat.category_id);
 
         lista.appendChild(div);
     });
-}
-
-// BUSCA
-document.getElementById("busca").addEventListener("input", e=>{
-    const termo = e.target.value.toLowerCase();
-    const filtrados = canais.filter(c=>c.name.toLowerCase().includes(termo));
-    render(filtrados);
 });
-</script>
 
-</body>
-</html>
+// 🔥 2 - carregar canais só quando clicar
+function carregarCanais(catId){
+    lista.innerHTML = "Carregando canais...";
+
+    fetch(proxy(`${server}/player_api.php?username=${user}&password=${pass}&action=get_live_streams`))
+    .then(r=>r.json())
+    .then(data=>{
+        const filtrados = data.filter(c=>c.category_id == catId);
+
+        lista.innerHTML = "";
+
+        filtrados.forEach(c=>{
+            const div = document.createElement("div");
+            div.className="item";
+            div.innerText = c.name;
+
+            div.onclick = ()=>{
+                const url = `${server}/live/${user}/${pass}/${c.stream_id}.m3u8`;
+                play(url);
+            }
+
+            lista.appendChild(div);
+        });
+    });
+}
+</script>
