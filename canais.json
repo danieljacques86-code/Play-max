@@ -1,10 +1,152 @@
 [
   {
-    "nome": "ESPN1",
+    "nome": "ESPN 1",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/2f/ESPN_wordmark.svg",
     "url": "https://b6256c363d52cf392ea6fcf698f07fd9.cloudfronte.lat/zzzstream/espn.m3u8"
   },
   {
-    "nome": "ESPN2",
+    "nome": "ESPN 2",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/2f/ESPN_wordmark.svg",
     "url": "https://b6256c363d52cf392ea6fcf698f07fd9.cloudfronte.lat/zzzstream/espn2.m3u8"
+  },
+  {
+    "nome": "SporTV",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3e/SporTV_logo_2021.png",
+    "url": "#"
+  },
+  {
+    "nome": "SporTV 2",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3e/SporTV_logo_2021.png",
+    "url": "#"
+  },
+  {
+    "nome": "Premiere",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Premiere_FC_logo.png",
+    "url": "#"
+  },
+  {
+    "nome": "TNT Sports",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6f/TNT_Sports_logo.png",
+    "url": "#"
+  },
+  {
+    "nome": "Globo",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/1/1b/TV_Globo_logo_2021.svg",
+    "url": "#"
+  },
+  {
+    "nome": "SBT",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6b/SBT_logo_2015.svg",
+    "url": "#"
+  },
+  {
+    "nome": "Band",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Band_logo_2018.png",
+    "url": "#"
+  },
+  {
+    "nome": "Record TV",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/7b/RecordTV_logo_2016.png",
+    "url": "#"
+  },
+  {
+    "nome": "RedeTV",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5d/RedeTV%21_logo_2017.png",
+    "url": "#"
+  },
+  {
+    "nome": "CNN Brasil",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b1/CNN.svg",
+    "url": "#"
+  },
+  {
+    "nome": "GloboNews",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Globonews_logo.png",
+    "url": "#"
+  },
+  {
+    "nome": "Discovery Channel",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Discovery_Channel_logo.svg",
+    "url": "#"
+  },
+  {
+    "nome": "National Geographic",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Natgeologo.svg",
+    "url": "#"
+  },
+  {
+    "nome": "History Channel",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5d/History_Logo.svg",
+    "url": "#"
+  },
+  {
+    "nome": "Cartoon Network",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Cartoon_Network_2010_logo.svg",
+    "url": "#"
+  },
+  {
+    "nome": "Disney Channel",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/64/Disney_Channel_logo.svg",
+    "url": "#"
+  },
+  {
+    "nome": "Nickelodeon",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Nickelodeon_2023_logo.svg",
+    "url": "#"
+  },
+  {
+    "nome": "Telecine Premium",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Telecine_logo.png",
+    "url": "#"
+  },
+  {
+    "nome": "HBO",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/d/de/HBO_logo.svg",
+    "url": "#"
+  },
+  {
+    "nome": "Warner Channel",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Warner_Channel_logo.svg",
+    "url": "#"
+  },
+  {
+    "nome": "AXN",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5a/AXN_logo.png",
+    "url": "#"
+  },
+  {
+    "nome": "Sony Channel",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/26/Sony_Channel_logo.png",
+    "url": "#"
+  },
+  {
+    "nome": "Multishow",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Multishow_logo.png",
+    "url": "#"
+  },
+  {
+    "nome": "GNT",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/2c/GNT_logo.png",
+    "url": "#"
+  },
+  {
+    "nome": "Viva",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Viva_logo.png",
+    "url": "#"
+  },
+  {
+    "nome": "Animal Planet",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Animal_Planet_logo.svg",
+    "url": "#"
+  },
+  {
+    "nome": "FX",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/62/FX_Logo.svg",
+    "url": "#"
+  },
+  {
+    "nome": "AMC",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/0/0f/AMC_logo.svg",
+    "url": "#"
   }
 ]
