@@ -1,10 +1,10 @@
 [
   {
     "nome": "ESPN",
-    "url": "https://seu-link.m3u8"
+    "url": "https://b6256c363d52cf392ea6fcf698f07fd9.cloudfronte.lat/zzzstream/espn.m3u8"
   },
   {
-    "nome": "Sportv",
-    "url": "https://outro-link.m3u8"
+    "nome": "ESPN2",
+    "url": "https://b6256c363d52cf392ea6fcf698f07fd9.cloudfronte.lat/zzzstream/espn2.m3u8"
   }
 ]
