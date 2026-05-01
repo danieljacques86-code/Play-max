@@ -1,0 +1,41 @@
+body{
+    margin:0;
+    font-family:Arial;
+    background:#0f172a;
+    color:#fff;
+}
+
+header{
+    padding:15px;
+    background:#020617;
+}
+
+.container{
+    display:flex;
+    height:100vh;
+}
+
+.sidebar{
+    width:280px;
+    background:#020617;
+    overflow:auto;
+}
+
+.canal{
+    padding:10px;
+    cursor:pointer;
+}
+
+.canal:hover{
+    background:#1e293b;
+}
+
+.player{
+    flex:1;
+    background:#000;
+}
+
+video{
+    width:100%;
+    height:100%;
+}
