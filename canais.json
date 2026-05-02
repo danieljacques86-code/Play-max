@@ -26,8 +26,13 @@
   },
   {
     "nome": "TNT Sports",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6f/TNT_Sports_logo.png",
-    "url": "#"
+    "logo": "https://tpc.googlesyndication.com/simgad/15138814762284967565?sqp=-oaymwEMCP0BEP0BIAFQAVgB&rs=AOga4qnnGCT0JdDI0s0Ya9ROnsxwf0lgNQ",
+    "url": "https://b6256c363d52cf392ea6fcf698f07fd9.cloudfronte.lat/zzzstream/disneyplus1.m3u8"
+  },
+ {
+    "nome": "Disney 2",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/d/de/HBO_logo.svg",
+    "url": "#https://b6256c363d52cf392ea6fcf698f07fd9.cloudfronte.lat/zzzstream/disneyplus2.m3u8"
   },
   {
     "nome": "Globo",
@@ -99,54 +104,5 @@
     "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Telecine_logo.png",
     "url": "#"
   },
+ 
   {
-    "nome": "HBO",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/d/de/HBO_logo.svg",
-    "url": "#"
-  },
-  {
-    "nome": "Warner Channel",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Warner_Channel_logo.svg",
-    "url": "#"
-  },
-  {
-    "nome": "AXN",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5a/AXN_logo.png",
-    "url": "#"
-  },
-  {
-    "nome": "Sony Channel",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/26/Sony_Channel_logo.png",
-    "url": "#"
-  },
-  {
-    "nome": "Multishow",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Multishow_logo.png",
-    "url": "#"
-  },
-  {
-    "nome": "GNT",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/2c/GNT_logo.png",
-    "url": "#"
-  },
-  {
-    "nome": "Viva",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Viva_logo.png",
-    "url": "#"
-  },
-  {
-    "nome": "Animal Planet",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Animal_Planet_logo.svg",
-    "url": "#"
-  },
-  {
-    "nome": "FX",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/62/FX_Logo.svg",
-    "url": "#"
-  },
-  {
-    "nome": "AMC",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/0/0f/AMC_logo.svg",
-    "url": "#"
-  }
-]
