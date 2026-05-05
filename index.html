@@ -89,6 +89,8 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
+      max-height: calc(100vh - 140px);
+      overflow-y: auto;
     }
 
     .channel {
@@ -99,10 +101,22 @@
       padding: 14px 16px;
       text-align: left;
       cursor: pointer;
+      transition: background 0.2s;
+      display: none; /* Inicialmente escondido até carregar */
+    }
+
+    .channel.show {
+      display: block;
     }
 
     .channel.active {
       background: #ff0000;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #888;
     }
 
     @media (max-width: 900px) {
@@ -136,21 +150,97 @@
   <main class="layout">
     <section class="content">
       <div class="player-box">
-        <iframe src="" title="Player" allowfullscreen></iframe>
+        <iframe src="" title="Player" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe>
       </div>
 
       <div class="video-info">
-        <h2>Nome do canal</h2>
-        <p>Assistindo agora</p>
+        <h2 id="nomeCanal">Carregando...</h2>
+        <p id="status">Aguardando seleção de canal</p>
       </div>
     </section>
 
-    <aside class="sidebar">
-      <button class="channel active">ESPN 1</button>
-      <button class="channel">ESPN 2</button>
-      <button class="channel">SporTV</button>
-      <button class="channel">Globo</button>
+    <aside class="sidebar" id="sidebar">
+      <div class="loading">Carregando canais do Dropbox...</div>
     </aside>
   </main>
+
+  <script>
+    const URL_DROPBOX = 'https://dl.dropbox.com/scl/fi/nln0qvhqwt6fx0b57zoy2/sportLive.txt?rlkey=qpodxt2auc0wyy46o9qdmto3b&st=51xpiwei&raw=1';
+    const iframe = document.querySelector('.player-box iframe');
+    const sidebar = document.getElementById('sidebar');
+    const searchInput = document.querySelector('.search');
+    const nomeCanal = document.getElementById('nomeCanal');
+    const status = document.getElementById('status');
+
+    let todosCanais = [];
+    let canalAtual = null;
+
+    // Função para carregar lista do Dropbox
+    async function carregarCanais() {
+      try {
+        const response = await fetch(URL_DROPBOX);
+        if (!response.ok) throw new Error('Falha no Dropbox: ' + response.status);
+        const texto = await response.text();
+        const linhas = texto.split('
+').filter(l => l.trim() && !l.startsWith('#'));
+
+        todosCanais = linhas.map(linha => linha.trim());
+        renderizarCanais();
+        if (todosCanais.length > 0) {
+          selecionarCanal(0); // Seleciona o primeiro
+        } else {
+          status.textContent = 'Lista vazia no Dropbox.';
+        }
+      } catch (error) {
+        console.error(error);
+        sidebar.innerHTML = `<div class="loading">Erro: ${error.message}. Verifique o URL Dropbox.</div>`;
+        status.textContent = 'Erro ao carregar canais.';
+      }
+    }
+
+    // Renderiza botões na sidebar
+    function renderizarCanais(filtro = '') {
+      sidebar.innerHTML = '';
+      const canaisFiltrados = todosCanais.filter(canal => 
+        canal.toLowerCase().includes(filtro.toLowerCase())
+      );
+
+      if (canaisFiltrados.length === 0) {
+        sidebar.innerHTML = '<div class="loading">Nenhum canal encontrado.</div>';
+        return;
+      }
+
+      canaisFiltrados.forEach((url, index) => {
+        const nome = url.split('/').pop().split('?')[0].split('.m3u')[0].substring(0, 30) || `Canal ${index + 1}`;
+        const button = document.createElement('button');
+        button.className = 'channel show';
+        button.textContent = nome;
+        button.dataset.url = url;
+        button.dataset.nome = nome;
+        button.onclick = () => selecionarCanalGlobal(url, nome);
+        sidebar.appendChild(button);
+      });
+    }
+
+    // Seleciona canal no player
+    function selecionarCanalGlobal(url, nome) {
+      canalAtual = url;
+      nomeCanal.textContent = nome;
+      status.textContent = 'Carregando...';
+      iframe.src = url + '?autoplay=1'; // Suporte a autoplay em alguns players
+
+      // Remove active de todos e adiciona no clicado
+      document.querySelectorAll('.channel').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    // Busca em tempo real
+    searchInput.oninput = (e) => {
+      renderizarCanais(e.target.value);
+    };
+
+    // Carrega ao iniciar
+    carregarCanais();
+  </script>
 </body>
 </html>
